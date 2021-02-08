@@ -3,7 +3,9 @@ import { config, createSchema } from '@keystone-next/keystone/schema'
 import { statelessSessions, withItemData } from '@keystone-next/keystone/session';
 import { User } from './schemas/User';
 import { Product } from './schemas/Product';
+import { ProductImage } from './schemas/ProductImage';
 import 'dotenv/config';
+import { insertSeedData } from './seed-data';
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost/keystone-sick-fits-tutorial'
 
@@ -17,26 +19,31 @@ const { withAuth } = createAuth({
   identityField: 'email', // What do they log in with?
   secretField: 'password',
   initFirstItem: {
-      fields: ['name', 'email', 'password'],
-      // @todo: Add initial roles here.
+    fields: ['name', 'email', 'password'],
+    // @todo: Add initial roles here.
   }
 });
 
 export default withAuth( config({
   server: {
-      cors: {
-          origin: [process.env.FRONTEND_URL],
-          credentials: true,
-      },
+    cors: {
+      origin: [process.env.FRONTEND_URL],
+      credentials: true,
+    },
   },
   db: {
-      adapter: 'mongoose',
-      url: databaseURL,
-      // @todo: Add data seeding here
+    adapter: 'mongoose',
+    url: databaseURL,
+    async onConnect(keystone) {
+      if ( process.argv.includes( '--seed-data' ) ) {
+        await insertSeedData( keystone )
+      }
+    },
   },
   lists: createSchema({
       User,
       Product,
+      ProductImage,
   }),
   ui: {
     // Show UI only for people who meet this requirement.
