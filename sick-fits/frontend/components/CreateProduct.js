@@ -1,4 +1,5 @@
 import useForm from '../lib/useForm';
+import Form from './styles/Form';
 
 export default function CreateProduct() {
   const { clearForm, handleChange, inputs, resetForm } = useForm({
@@ -8,8 +9,9 @@ export default function CreateProduct() {
   });
 
   return (
-    <form>
+    <Form>
       <label htmlFor="name">
+        Name
         <input
           type="text"
           id="name"
@@ -20,6 +22,7 @@ export default function CreateProduct() {
         />
       </label>
       <label htmlFor="price">
+        Price
         <input
           type="number"
           id="price"
@@ -35,6 +38,6 @@ export default function CreateProduct() {
       <button type="button" onClick={resetForm}>
         Reset Form
       </button>
-    </form>
+    </Form>
   );
 }
