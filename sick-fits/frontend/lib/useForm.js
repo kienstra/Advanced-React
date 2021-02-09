@@ -25,14 +25,9 @@ export default function useForm(initial = {}) {
   }
 
   function clearForm() {
-    const blankState = Object.keys(inputs).reduce(
-      (accumulator, key) => ({
-        ...accumulator,
-        [key]: undefined,
-      }),
-      {}
+    const blankState = Object.fromEntries(
+      Object.entries(inputs).map(([key]) => [key, ''])
     );
-
     setForm(blankState);
   }
 
