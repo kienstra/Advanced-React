@@ -41,7 +41,7 @@ export default function SignIn() {
   }
 
   const error =
-    data?.authenticateUserWithPassword.__typename ===
+    data?.authenticateUserWithPassword?.__typename ===
     'UserAuthenticationWithPasswordFailure'
       ? data?.authenticateUserWithPassword
       : undefined;
