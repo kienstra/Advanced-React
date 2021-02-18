@@ -4,8 +4,10 @@ import { statelessSessions, withItemData } from '@keystone-next/keystone/session
 import { User } from './schemas/User';
 import { Product } from './schemas/Product';
 import { ProductImage } from './schemas/ProductImage';
+import { CartItem } from './schemas/CartItem';
 import 'dotenv/config';
 import { insertSeedData } from './seed-data';
+import { sendPasswordResetEmail } from './lib/mail';
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost/keystone-sick-fits-tutorial'
 
@@ -21,7 +23,13 @@ const { withAuth } = createAuth({
   initFirstItem: {
     fields: ['name', 'email', 'password'],
     // @todo: Add initial roles here.
-  }
+  },
+  passwordResetLink: {
+    async sendToken(args) {
+      await sendPasswordResetEmail(args.token, args.identity);
+      console.log(args)
+    },
+  },
 });
 
 export default withAuth( config({
@@ -44,6 +52,7 @@ export default withAuth( config({
       User,
       Product,
       ProductImage,
+      CartItem,
   }),
   ui: {
     // Show UI only for people who meet this requirement.

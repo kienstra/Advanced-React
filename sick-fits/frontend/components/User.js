@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 
-// On is because it could be of many types, so it only looks for User.
+// ... on is because it could be of many types, so it only looks for User.
 const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
     authenticatedItem {
@@ -8,7 +8,21 @@ const CURRENT_USER_QUERY = gql`
         id
         email
         name
-        # Todo: query cart when have it
+        cart {
+          id
+          quantity
+          product {
+            id
+            price
+            name
+            description
+            photo {
+              image {
+                publicUrlTransformed
+              }
+            }
+          }
+        }
       }
     }
   }
