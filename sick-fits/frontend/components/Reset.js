@@ -28,7 +28,7 @@ export default function Reset({ token }) {
     token,
   });
 
-  const [reset, { data, loading, error }] = useMutation(RESET_MUTATION, {
+  const [reset, { data, error }] = useMutation(RESET_MUTATION, {
     variables: inputs,
   });
   const successfulError = data?.redeemUserPasswordResetToken?.code

@@ -25,7 +25,7 @@ export default function SignUp() {
     name: '',
   });
 
-  const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION, {
+  const [signUp, { data, error }] = useMutation(SIGN_UP_MUTATION, {
     variables: inputs,
   });
 

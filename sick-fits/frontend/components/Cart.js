@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { useUser } from './User';
 import CartStyles from './styles/CartStyles';
+import CloseButton from './styles/CloseButton';
 import Supreme from './styles/Supreme';
 import formatMoney from '../lib/formatMoney';
 import calcTotalPrice from '../lib/calcTotalPrice';
+import { useCart } from '../lib/cartState';
 
 const CartItemStyles = styled.li`
   padding: 1rem 0;
@@ -47,15 +49,19 @@ function CartItem({cartItem}) {
 }
 
 export default function Cart() {
+  const { cartOpen, closeCart } = useCart();
   const user = useUser();
   if (!user) {
     return <p>Cannot view cart when not signed in</p>
   }
 
   return (
-    <CartStyles open>
+    <CartStyles open={cartOpen}>
       <header>
         <Supreme>{user.name}'s cart</Supreme>
+        <CloseButton type="button" onClick={closeCart}>
+          &times;
+        </CloseButton>
       </header>
       <ul>
         {user.cart.map((cartItem) => (

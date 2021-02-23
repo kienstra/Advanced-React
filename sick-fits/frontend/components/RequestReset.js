@@ -24,7 +24,7 @@ export default function RequestReset() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    await signUp().catch((error) => console.log(error));
+    await signUp().catch((error) => {});
     resetForm();
   }
 
