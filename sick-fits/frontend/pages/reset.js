@@ -15,7 +15,6 @@ export default function ResetPage() {
   }
   return (
     <div>
-      <p>Reset your password {router.query.token}</p>
       <Reset token={router?.query?.token}/>
     </div>
   );
