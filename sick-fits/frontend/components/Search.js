@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { useRouter } from 'next/dist/client/router';
 import { useLazyQuery } from '@apollo/client';
 import debounce from 'lodash.debounce';
 import { resetIdCounter, useCombobox } from 'downshift';
@@ -26,6 +27,7 @@ const SEARCH_PRODUCTS_QUERY = gql`
 `;
 
 export default function Search() {
+  const router = useRouter();
   const [
     findItems,
     { loading, data, error },
@@ -34,29 +36,27 @@ export default function Search() {
   const items = data?.searchTerms || [];
   const findItemsButChill = debounce(findItems, 350);
 
-  console.log(data);
   resetIdCounter();
   const {
     inputValue,
     getComboboxProps,
     highlightedIndex,
+    isOpen,
     getMenuProps,
     getInputProps,
     getItemProps,
   } = useCombobox({
     items,
     onInputValueChange() {
-      console.log("Input changed");
       findItemsButChill({
         variables: { searchTerm: inputValue },
       });
     },
-    onSelectedItemChange() {
-      console.log("Selected item changed");
+    onSelectedItemChange({ selectedItem }) {
+      router.push({ pathname: `/product/${selectedItem.id}` });
     },
+    itemToString: (item) => item?.name || '',
   });
-
-  console.log(highlightedIndex);
 
   return (
     <SearchStyles>
@@ -71,20 +71,25 @@ export default function Search() {
         />
       </div>
       <DropDown {...getMenuProps()}>
-        {items.map((item, index) => (
-          <DropDownItem
-            key={item.id}
-            {...getItemProps({ item })}
-            highlighted={index === highlightedIndex}
-          >
-            <img
-              src={item.photo.image.publicUrlTransformed}
-              alt={item.name}
-              width="50"
-            />
-            {item.name}
-          </DropDownItem>
-        ))}
+        {isOpen
+          ? items.map((item, index) => (
+              <DropDownItem
+                key={item.id}
+                {...getItemProps({ item })}
+                highlighted={index === highlightedIndex}
+              >
+                <img
+                  src={item.photo.image.publicUrlTransformed}
+                  alt={item.name}
+                  width="50"
+                />
+                {item.name}
+              </DropDownItem>
+            ))
+          : null}
+        {isOpen && !items.length && !loading ? (
+          <DropDownItem>Sorry, no items found for {inputValue}</DropDownItem>
+        ) : null }
       </DropDown>
     </SearchStyles>
   );
