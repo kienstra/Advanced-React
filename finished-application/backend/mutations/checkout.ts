@@ -6,9 +6,8 @@ import {
 } from '../.keystone/schema-types';
 
 /* eslint-disable */
-import { KeystoneContext } from '@keystone-next/types';
+import { KeystoneContext, SessionStore } from '@keystone-next/types';
 import stripeConfig from '../lib/stripe';
-import gql from ''
 
 const graphql = String.raw;
 
@@ -16,9 +15,6 @@ interface Arguments {
   token: string
 }
 
-const CREATE_ORDER_MUTATION = gql`
-
-`;
 
 async function checkout(
   root: any,
