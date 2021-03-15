@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import PleaseSignIn from '../components/PleaseSignIn';
 import UpdateProduct from '../components/UpdateProduct';
 
 export default function UpdatePage() {
@@ -6,7 +7,9 @@ export default function UpdatePage() {
 
   return (
     <div>
-      <UpdateProduct id={query.id} />
+      <PleaseSignIn>
+        <UpdateProduct id={query.id} />
+      </PleaseSignIn>
     </div>
   );
 }
